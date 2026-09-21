@@ -1,10 +1,13 @@
 from django.db import models
-from django.conf import settings
+from config import settings
+
+from account.models import TimeStampedModel, CustomUser
+
 
 # Create your models here.
 
 
-class Project(models.Model):
+class Project(TimeStampedModel):
     class Visibility(models.TextChoices):
         PRIVATE = 'private', 'Private'
         PUBLIC = 'public', 'Public'
@@ -12,9 +15,10 @@ class Project(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name='owned_projects',
+        blank=True
     )
     visibility = models.CharField(
         max_length=10,
@@ -22,14 +26,11 @@ class Project(models.Model):
         default=Visibility.PRIVATE
     )
     members = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        CustomUser,
         through='ProjectMember',
         related_name='projects',
         blank=True
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
 
     class Meta:
         ordering = ['-created_at']
@@ -38,7 +39,7 @@ class Project(models.Model):
         return self.name
 
 
-class ProjectMember(models.Model):
+class ProjectMember(TimeStampedModel):
     class Role(models.TextChoices):
         ADMIN = 'admin', 'Admin'
         MEMBER = 'member', 'Member'
@@ -49,7 +50,7 @@ class ProjectMember(models.Model):
         related_name='project_members'
     )
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        CustomUser,
         on_delete=models.CASCADE,
         related_name='project_memberships',
     )
@@ -58,7 +59,8 @@ class ProjectMember(models.Model):
         choices=Role.choices,
         default=Role.MEMBER
     )
-    joined_at = models.DateTimeField(auto_now_add=True)
+    join_date = models.DateField(blank=True, null=True)
+    left_date = models.DateField(blank=True, null=True)
 
     class Meta:
         constraints = [

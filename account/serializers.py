@@ -7,8 +7,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = [
             'username',
-            'phone',
+            'phone_number',
             'email',
+            'avatar',
             'password'
         ]
 
@@ -18,3 +19,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return CustomUser.objects.create_user(**validated_data)
+
+
+class LoginSerializers(serializers.Serializer):
+    username = serializers.CharField(max_length=128)
+    password = serializers.CharField(max_length=128, write_only=True)

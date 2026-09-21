@@ -29,9 +29,9 @@ urlpatterns = [
         path('', include('account.urls')),
         path('', include('project.urls')),
         path('', include('task.urls')),
+        path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+        path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     ])),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 if settings.DEBUG:
