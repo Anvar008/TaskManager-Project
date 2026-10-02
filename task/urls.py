@@ -1,5 +1,13 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
+from .views import *
 
-urlpatterns = [
+# urlpatterns = [
     # path('')
-]
+# ]
+
+
+router = DefaultRouter()
+router.register('task', TaskModelViewSet, basename='task')
+
+urlpatterns = router.urls

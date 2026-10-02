@@ -27,6 +27,7 @@ class LoginApiView(CreateAPIView):
             access = refresh.access_token
 
             return Response({
+                'id': user.id,
                 'message': 'Ok',
                 'status': 200,
                 'access': str(access),

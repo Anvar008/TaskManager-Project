@@ -19,8 +19,8 @@ class Task(TimeStampedModel):
     description = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.TODO)
     priority = models.CharField(max_length=10, choices=Priority.choices, default=Priority.MEDIUM)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_tasks')
-    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='assigned_tasks', null=True, blank=True)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='created_tasks')
+    assigned_to = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='assigned_tasks')
     due_data = models.DateTimeField(null=True, blank=True)
 
     class Meta:
